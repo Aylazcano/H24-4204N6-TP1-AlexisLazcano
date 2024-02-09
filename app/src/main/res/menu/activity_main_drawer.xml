@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_home"
+        android:title="Accueil"
+        android:contentDescription="content_description_favorite"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nav_add_task"
+        android:title="Ajout de tâche"
+        android:contentDescription="content_description_search"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Déconnexion"
+        android:contentDescription="content_description_more"
+        app:showAsAction="never" />
+
+</menu>

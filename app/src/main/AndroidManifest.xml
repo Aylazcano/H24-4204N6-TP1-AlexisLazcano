@@ -21,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ConnexionActivity"></activity>
+        <activity android:name=".InscriptionActivity"></activity>
+        <activity android:name=".TaskConsultationActivity"></activity>
+        <activity android:name=".TaskCreationActivity"></activity>
     </application>
 
 </manifest>
