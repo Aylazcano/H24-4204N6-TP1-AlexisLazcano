@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TP1 Client Android</string>
+    <string name="username">Nom de l'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="confirm_password">Confirmation du mot de passe</string>
+    <string name="signup">Inscription</string>
+    <string name="signin">Connexion</string>
+    <string name="home">Accueil</string>
+    <string name="add_task">Ajout de tâche</string>
+    <string name="logout">Déconnexion</string>
+    <string name="create_task">Créer une tâche</string>
+    <string name="task_name">Nom de la tâche</string>
+    <string name="deadline_date">Date d'échéance</string>
+    <string name="task_completion_percentage">Pourcentage d'avancement de la tâche</string>
+    <string name="time_elapsed_percentage">Pourcentage de temps écoulé entre la date de création et la date limite</string>
+    <string name="time_elapsed_since_creation">Temps écoulé depuis la création de la tâche</string>
+    <string name="edit_completion_percentage">Modifier le pourcentage d'avancement</string>
+</resources>

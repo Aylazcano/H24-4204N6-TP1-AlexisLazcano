@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">TP1 Client Android</string>
+    <string name="app_name">TP1 Android Client</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="signup">Sign up</string>
+    <string name="signin">Sign in</string>
+    <string name="home">Home</string>
+    <string name="add_task">Add Task</string>
+    <string name="logout">Logout</string>
+    <string name="create_task">Create a task</string>
+    <string name="task_name">Task Name</string>
+    <string name="deadline_date">Deadline Date</string>
+    <string name="task_completion_percentage">Task Completion Percentage</string>
+    <string name="time_elapsed_percentage">Percentage of time elapsed between creation date and deadline</string>
+    <string name="time_elapsed_since_creation">Time elapsed since task creation</string>
+    <string name="edit_completion_percentage">Edit Completion Percentage</string>
 </resources>
