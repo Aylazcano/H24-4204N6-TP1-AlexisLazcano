@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        setTitle(R.string.main_activity_title);
 
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
@@ -40,15 +41,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(R.string.drawer_open);
-                Toast.makeText(MainActivity.this, "Ouvert", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(R.string.drawer_close);
-                Toast.makeText(MainActivity.this, "Fermé", Toast.LENGTH_SHORT).show();
             }
 
         };
@@ -65,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.nav_home) {
                     i =  new Intent(MainActivity.this, MainActivity.class);
                     startActivity(i);
+                    i.putExtra("id", -2);
                     return true;
+
 
                 } else if (item.getItemId() == R.id.nav_add_task) {
                     i = new Intent(MainActivity.this, TaskCreationActivity.class);

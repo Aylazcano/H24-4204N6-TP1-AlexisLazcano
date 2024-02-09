@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TP1 Client Android</string>
-    <string name="username">Nom de l\'utilisateur</string>
+    <!-- Titres -->
+    <string name="app_name">TP1 Android Client</string>
+    <string name="main_activity_title">TP1 : Accueil</string>
+    <string name="connexion_activity_title">TP1 : Inscription</string>
+    <string name="inscription_activity_title">TP1 : Connexion</string>
+    <string name="task_consultation_activity_title">TP1 : Consultation de tâches</string>
+    <string name="task_creation_activity_title">TP1 : Ajout de tâche</string>
+
+    <!-- Autres -->
+    <string name="username">Nom d\'utilisateur</string>
     <string name="password">Mot de passe</string>
-    <string name="confirm_password">Confirmation du mot de passe</string>
-    <string name="signup">Inscription</string>
-    <string name="signin">Connexion</string>
+    <string name="confirm_password">Confirmer le mot de passe</string>
+    <string name="signup">S\'inscrire</string>
+    <string name="signin">Se connecter</string>
     <string name="home">Accueil</string>
-    <string name="add_task">Ajout de tâche</string>
+    <string name="add_task">Ajouter une tâche</string>
     <string name="logout">Déconnexion</string>
     <string name="create_task">Créer une tâche</string>
     <string name="task_name">Nom de la tâche</string>
-    <string name="deadline_date">Date d\'échéance</string>
-    <string name="task_completion_percentage">Pourcentage d\'avancement de la tâche</string>
+    <string name="deadline_date">Date limite</string>
+    <string name="task_completion_percentage">Pourcentage d\'achèvement de la tâche</string>
     <string name="time_elapsed_percentage">Pourcentage de temps écoulé entre la date de création et la date limite</string>
     <string name="time_elapsed_since_creation">Temps écoulé depuis la création de la tâche</string>
-    <string name="edit_completion_percentage">Modifier le pourcentage d\'avancement</string>
-    <string name="drawer_open">Ferme moi</string>
-    <string name="drawer_close">Ouvre moi</string>
+    <string name="edit_completion_percentage">Modifier le pourcentage d\'achèvement</string>
+    <string name="drawer_open">Fermer</string>
+    <string name="drawer_close">Ouvrir</string>
 </resources>

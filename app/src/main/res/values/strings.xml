@@ -1,5 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Titles -->
     <string name="app_name">TP1 Android Client</string>
+    <string name="main_activity_title">TP1: Home</string>
+    <string name="connexion_activity_title">TP1: Sign up</string>
+    <string name="inscription_activity_title">TP1: Sign in</string>
+    <string name="task_consultation_activity_title">TP1: Task Consultation</string>
+    <string name="task_creation_activity_title">TP1: Add Task</string>
+
+    <!-- Others -->
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
