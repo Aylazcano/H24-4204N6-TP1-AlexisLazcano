@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -17,9 +19,13 @@ import android.widget.Toast;
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private TaskAdapter taskAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
         setTitle(R.string.main_activity_title);
 
+        // initialisation du recycler
+        this.initRecycler();
+        this.fillRecycler();
+
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
@@ -37,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Changement automatique de l'icône de menu et du titre avec l'action du tiroir
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -60,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i;
 
                 if (item.getItemId() == R.id.nav_home) {
-                    i =  new Intent(MainActivity.this, MainActivity.class);
+                    i = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(i);
                     i.putExtra("id", -2);
                     return true;
@@ -86,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     // Interaction avec l'icône de menu lorsque l'utilisateur appuie dessus
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)){
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -105,4 +115,30 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
         super.onConfigurationChanged(newConfig);
     }
+
+    // RecyclerView
+    private void initRecycler() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // specify an adapter (see also next example)
+        taskAdapter = new TaskAdapter();
+        recyclerView.setAdapter(taskAdapter);
+    }
+    private void fillRecycler() {
+        for (int i = 1; i <= 200; i++) {
+            String taskName = getString(R.string.task_name) + " " + i;
+            int completionPercentage = (int) (Math.random() * 100);
+            int timeElapsedPercentage = (int) (Math.random() * 100);
+            Date creationDate = new Date(System.currentTimeMillis() - (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random creation date within the last 30 days
+            Date deadlineDate = new Date(System.currentTimeMillis() + (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random deadline date within the next 30 days
+            taskAdapter.taskList.add(new Task(taskName, completionPercentage, timeElapsedPercentage, creationDate, deadlineDate));
+        }
+        taskAdapter.notifyDataSetChanged();
+    }
+
+
 }

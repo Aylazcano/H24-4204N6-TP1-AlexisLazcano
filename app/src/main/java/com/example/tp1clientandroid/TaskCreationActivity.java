@@ -42,15 +42,11 @@ public class TaskCreationActivity extends AppCompatActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(R.string.drawer_open);
-                Toast.makeText(TaskCreationActivity.this, "Ouvert", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(R.string.drawer_close);
-                Toast.makeText(TaskCreationActivity.this, "Fermé", Toast.LENGTH_SHORT).show();
             }
 
         };
