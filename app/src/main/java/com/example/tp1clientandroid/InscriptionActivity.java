@@ -13,6 +13,11 @@ import com.example.tp1clientandroid.databinding.ActivityInscriptionBinding;
 public class InscriptionActivity extends AppCompatActivity {
     private ActivityInscriptionBinding binding;
 
+    /*private EditText editUsername;
+    private EditText editPassword;
+    private EditText editConfirmPassword;
+    private Button buttonSignUp;*/
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +27,10 @@ public class InscriptionActivity extends AppCompatActivity {
         setTitle(R.string.inscription_activity_title);
 
         // Recherche des éléments de la vue
+        /*editUsername = findViewById(R.id.edit_text_username);
+        editPassword = findViewById(R.id.edit_text_password);
+        editConfirmPassword = findViewById(R.id.edit_text_confirm_password);
+        buttonSignUp = findViewById(R.id.button_sign_up);*/
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
