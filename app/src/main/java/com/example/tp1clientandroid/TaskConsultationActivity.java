@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
     private TextView completionPercentageTV;
     private TextView timeElapsedPercentageTV;
     private TextView deadlineDateTV;
+    private Button buttonSave;
 
 
     @Override
@@ -48,10 +50,19 @@ public class TaskConsultationActivity extends AppCompatActivity {
         completionPercentageTV = findViewById(R.id.completionPercentageConsultation);
         timeElapsedPercentageTV = findViewById(R.id.timeElapsedPercentageConsultation);
         deadlineDateTV = findViewById(R.id.deadlineDateConsultation);
+        buttonSave = findViewById(R.id.consultLayout_buttonSave);
 
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =  new Intent(TaskConsultationActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Changement automatique de l'icône de menu et du titre avec l'action du tiroir
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close){

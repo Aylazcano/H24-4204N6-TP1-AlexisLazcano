@@ -15,7 +15,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ConnexionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +24,8 @@
         </activity>
 
         <activity
-            android:name=".ConnexionActivity"
-            android:label="@string/connexion_activity_title" />
+            android:name=".MainActivity"
+            android:label="@string/home"/>
 
         <activity
             android:name=".InscriptionActivity"
