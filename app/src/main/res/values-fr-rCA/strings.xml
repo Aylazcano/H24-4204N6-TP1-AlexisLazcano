@@ -26,4 +26,5 @@
     <string name="edit_completion_percentage">Modifier le pourcentage d\'achèvement</string>
     <string name="drawer_open">Fermer</string>
     <string name="drawer_close">Ouvrir</string>
+    <string name="save">Sauvegarder</string>
 </resources>

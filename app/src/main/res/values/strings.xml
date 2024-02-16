@@ -25,5 +25,6 @@
     <string name="time_elapsed_since_creation">Time elapsed since task creation</string>
     <string name="edit_completion_percentage">Edit Completion Percentage</string>
     <string name="drawer_open">Close me</string>
-    <string name="drawer_close">Open me</string>
+    <string name="drawer_close">Open me</string>S
+    <string name="save">Save</string>
 </resources>

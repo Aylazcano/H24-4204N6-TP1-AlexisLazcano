@@ -33,13 +33,6 @@
                     android:padding="2dp">
 
                     <!-- Continuous slider -->
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/taskNameConsultationSlider"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:valueFrom="0"
-                        android:valueTo="100"
-                        android:padding="4dp"/>
 
 
                 </LinearLayout>
@@ -94,6 +87,28 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/edit_completion_percentage"
+                    android:layout_marginTop="16dp"
+                    android:padding="4dp"/>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/taskNameConsultationSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="4dp"
+                    android:valueFrom="0"
+                    android:valueTo="100" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/save" />
+
             </LinearLayout>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -104,7 +119,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/activity_main_drawer" />
+            app:menu="@menu/activity_main_drawer"
+            app:headerLayout="@layout/nav_header_main"/>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
