@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private TaskAdapter taskAdapter;
     private RecyclerView recyclerView;
+    private FloatingActionButton buttonFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,18 @@ public class MainActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
+        buttonFAB = findViewById(R.id.fab);
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        buttonFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TaskCreationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Changement automatique de l'icône de menu et du titre avec l'action du tiroir
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close) {
