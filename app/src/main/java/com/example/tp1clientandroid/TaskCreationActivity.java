@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +20,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.databinding.ActivityTaskCreationBinding;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.navigation.NavigationView;
+
+import java.time.LocalDateTime;
 
 public class TaskCreationActivity extends AppCompatActivity {
     private ActivityTaskCreationBinding binding;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Button buttonAddTask;
+    private EditText taskName;
+    private TextView taskDeadline;
+    private DatePicker datePicker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,15 @@ public class TaskCreationActivity extends AppCompatActivity {
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
         buttonAddTask = findViewById(R.id.buttonAddTask);
+        taskName = findViewById(R.id.editTextTaskName);
+        taskDeadline = findViewById(R.id.deadLineTV);
+        datePicker = findViewById(R.id.datePicker);
+
+        LocalDateTime dt = LocalDateTime.now();
+        datePicker.init(dt.getYear(), dt.getMonth().getValue(), dt.getDayOfMonth(), (view1, year, monthOfYear, dayOfMonth) -> {
+            taskDeadline.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+        });
+
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
