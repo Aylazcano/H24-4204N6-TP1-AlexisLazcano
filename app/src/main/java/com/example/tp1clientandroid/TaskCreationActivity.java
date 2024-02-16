@@ -37,23 +37,19 @@ public class TaskCreationActivity extends AppCompatActivity {
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Changement automatique de l'icône de menu et du titre avec l'action du tiroir
+        // Changement automatique de l'icône de menu
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close){
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
+            public void onDrawerOpened(View drawerView) { super.onDrawerOpened(drawerView); }
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
+            public void onDrawerClosed(View drawerView) { super.onDrawerClosed(drawerView); }
 
         };
 
+        // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -63,9 +59,7 @@ public class TaskCreationActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.nav_home) {
                     i =  new Intent(TaskCreationActivity.this, MainActivity.class);
                     startActivity(i);
-                    i.putExtra("id", -2);
                     return true;
-
 
                 } else if (item.getItemId() == R.id.nav_add_task) {
                     i = new Intent(TaskCreationActivity.this, TaskCreationActivity.class);

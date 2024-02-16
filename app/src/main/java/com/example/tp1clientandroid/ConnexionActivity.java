@@ -32,7 +32,6 @@ public class ConnexionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    // Gère les actions de l'utilisateur dans la barre d'action, telles que le bouton de retour
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

@@ -1,10 +1,12 @@
 package com.example.tp1clientandroid;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -16,18 +18,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public List<Task> taskList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView taskName;
-        public TextView completionPercentage;
-        public TextView timeElapsedPercentage;
-        public TextView deadlineDate;
+        public TextView taskNameTV;
+        public TextView completionPercentageTV;
+        public TextView timeElapsedPercentageTV;
+        public TextView deadlineDateTV;
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            taskName = view.findViewById(R.id.taskName);
-            completionPercentage = view.findViewById(R.id.completionPercentage);
-            timeElapsedPercentage = view.findViewById(R.id.timeElapsedPercentage);
-            deadlineDate = view.findViewById(R.id.deadlineDate);
+            taskNameTV = view.findViewById(R.id.taskNameRV);
+            completionPercentageTV = view.findViewById(R.id.completionPercentageRV);
+            timeElapsedPercentageTV = view.findViewById(R.id.timeElapsedPercentageRV);
+            deadlineDateTV = view.findViewById(R.id.deadlineDateRV);
         }
     }
 
@@ -53,16 +55,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         Task currentTask = taskList.get(position);
-        viewHolder.taskName.setText(currentTask.taskName);
-        viewHolder.deadlineDate.setText(currentTask.deadlineDate.toString());
-        viewHolder.completionPercentage.setText(String.valueOf(currentTask.completionPercentage) + "%");
-        viewHolder.timeElapsedPercentage.setText(String.valueOf(currentTask.timeElapsedPercentage) + "%");
+        viewHolder.taskNameTV.setText(currentTask.taskName);
+        viewHolder.deadlineDateTV.setText(currentTask.deadlineDate.toString());
+        viewHolder.completionPercentageTV.setText(String.valueOf(currentTask.completionPercentage) + "%");
+        viewHolder.timeElapsedPercentageTV.setText(String.valueOf(currentTask.timeElapsedPercentage) + "%");
 
         // Format the deadline date to yyyy/MM/dd
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         String formattedDeadlineDate = sdf.format(currentTask.deadlineDate);
-        viewHolder.deadlineDate.setText(formattedDeadlineDate);
+        viewHolder.deadlineDateTV.setText(formattedDeadlineDate);
 
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Task selectedTask = taskList.get(position);
+                Intent intent = new Intent(view.getContext(),TaskConsultationActivity.class);
+
+                intent.putExtra("selectedTaskName", selectedTask.taskName);
+                intent.putExtra("selectedTaskCompletionPercentage", String.valueOf(selectedTask.completionPercentage));
+                intent.putExtra("selectedTaskTimeElapsedPercentage", String.valueOf(selectedTask.timeElapsedPercentage));
+                intent.putExtra("selectedTaskDeadlineDate", formattedDeadlineDate);
+
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

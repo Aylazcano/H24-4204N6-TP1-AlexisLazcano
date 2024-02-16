@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         };
 
+        // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -72,9 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.nav_home) {
                     i = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(i);
-                    i.putExtra("id", -2);
                     return true;
-
 
                 } else if (item.getItemId() == R.id.nav_add_task) {
                     i = new Intent(MainActivity.this, TaskCreationActivity.class);
