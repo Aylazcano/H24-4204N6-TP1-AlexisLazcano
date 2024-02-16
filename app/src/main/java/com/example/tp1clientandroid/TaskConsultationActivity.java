@@ -43,7 +43,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        slider =findViewById(R.id.taskNameConsultationSlider);
+        slider = findViewById(R.id.taskNameConsultationSlider);
         taskNameTV = findViewById(R.id.taskNameConsultation);
         completionPercentageTV = findViewById(R.id.completionPercentageConsultation);
         timeElapsedPercentageTV = findViewById(R.id.timeElapsedPercentageConsultation);
