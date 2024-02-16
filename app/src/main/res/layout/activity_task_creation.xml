@@ -1,5 +1,5 @@
 <!-- Layout racine avec DrawerLayout -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,15 +20,49 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- NestedScrollView pour le contenu défilant -->
-            <androidx.core.widget.NestedScrollView
+            <!-- Formulaire pour créer une tâche -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <!-- Contenu défilant -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/task_name">
 
-            </androidx.core.widget.NestedScrollView>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextTaskName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/deadline_date_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextTaskDeadline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/buttonAddTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_task"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp" />
+
+            </LinearLayout>
+
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -43,4 +77,4 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 public class TaskCreationActivity extends AppCompatActivity {
     private ActivityTaskCreationBinding binding;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Button buttonAddTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,18 @@ public class TaskCreationActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
+        buttonAddTask = findViewById(R.id.buttonAddTask);
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        buttonAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TaskCreationActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Changement automatique de l'icône de menu
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close){
