@@ -132,10 +132,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 1; i <= 200; i++) {
             String taskName = getString(R.string.task_name) + " " + i;
             int completionPercentage = (int) (Math.random() * 100);
-            int timeElapsedPercentage = (int) (Math.random() * 100);
             Date creationDate = new Date(System.currentTimeMillis() - (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random creation date within the last 30 days
             Date deadlineDate = new Date(System.currentTimeMillis() + (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random deadline date within the next 30 days
-            taskAdapter.taskList.add(new Task(taskName, completionPercentage, timeElapsedPercentage, creationDate, deadlineDate));
+            taskAdapter.taskList.add(new Task(taskName, completionPercentage, creationDate, deadlineDate));
         }
         taskAdapter.notifyDataSetChanged();
     }

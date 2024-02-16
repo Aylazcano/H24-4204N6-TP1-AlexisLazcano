@@ -15,11 +15,14 @@ public class Task {
     public Date creationDate;
     public Date deadlineDate;
 
-    public Task(String pTaskName, int pCompletionPercentage, int pTimeElapsedPercentage, Date pCreationDate, Date pDeadlineDate){
+    public Task(String pTaskName, int pCompletionPercentage, Date pCreationDate, Date pDeadlineDate){
         taskName = pTaskName;
         completionPercentage = pCompletionPercentage;
-        timeElapsedPercentage = pTimeElapsedPercentage;
         creationDate = pCreationDate;
         deadlineDate = pDeadlineDate;
+
+        long elapsedTime = System.currentTimeMillis() - creationDate.getTime();
+        long totalTime = deadlineDate.getTime() - creationDate.getTime();
+        timeElapsedPercentage = (int) ((elapsedTime * 100) / totalTime);
     }
 }
