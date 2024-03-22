@@ -34,7 +34,10 @@ android {
 
 dependencies {
 
-    //Appcompat
+    // KickMyB-Library (JitPack)
+    implementation 'com.github.departement-info-cem:KickMyB-Library:31d81e9843'
+
+    // Appcompat
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.appcompat:appcompat-resources:1.6.1'
 
@@ -47,4 +50,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Fix: java.lang.RuntimeException: Duplicate class com.google.common.util.concurrent.ListenableFuture found in modules guava-19.0 (com.google.guava:guava:19.0) and listenablefuture-1.0 (com.google.guava:listenablefuture:1.0)
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
