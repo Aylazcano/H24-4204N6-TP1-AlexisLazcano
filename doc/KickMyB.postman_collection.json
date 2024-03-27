@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a827b5bd-f01e-4859-a2a2-3f910548d16b",
+		"_postman_id": "27756c16-b7df-436a-b0f2-7ef8cc5f94d5",
 		"name": "KickMyB",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"alexis\",\r\n    \"password\": \"P@ssw0rd\",\r\n    \"confirmPassword\": \"P@ssw0rd\"\r\n}",
+					"raw": "{\r\n    \"username\": \"alexis\",\r\n    \"password\": \"P@ssw0rd\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -168,7 +168,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"taskName\": \"tâche TEST\",\r\n    \"deadlineDate\": \"2024-03-30T12:00:00\"\r\n}\r\n",
+					"raw": "{\r\n    \"name\": \"tâche TEST1\",\r\n    \"deadline\": \"2069-05-24T12:12:12\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"

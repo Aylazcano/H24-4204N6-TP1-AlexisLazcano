@@ -29,4 +29,5 @@
     <string name="drawer_close">Open me</string>S
     <string name="save">Save</string>
     <string name="submit">Submit</string>
+    <string name="confirm_password_error">Password and confirm password fields don\'t match</string>
 </resources>
