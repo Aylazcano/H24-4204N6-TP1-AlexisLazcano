@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "27756c16-b7df-436a-b0f2-7ef8cc5f94d5",
+		"_postman_id": "8709f5ab-9768-4abc-b6f8-57c27e01bb45",
 		"name": "KickMyB",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33885139"
 	},
 	"item": [
 		{
@@ -87,21 +88,9 @@
 		},
 		{
 			"name": "SignOut",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "http://localhost:8080/api/id/signout",
 					"protocol": "http",
