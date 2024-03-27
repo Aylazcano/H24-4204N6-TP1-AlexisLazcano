@@ -45,12 +45,12 @@ public class TaskConsultationActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        slider = findViewById(R.id.taskNameConsultationSlider);
-        taskNameTV = findViewById(R.id.taskNameConsultation);
-        completionPercentageTV = findViewById(R.id.completionPercentageConsultation);
-        timeElapsedPercentageTV = findViewById(R.id.timeElapsedPercentageConsultation);
-        deadlineDateTV = findViewById(R.id.deadlineDateConsultation);
-        buttonSave = findViewById(R.id.consultLayout_buttonSave);
+        slider = binding.taskNameConsultationSlider;
+        taskNameTV = binding.taskNameConsultation;
+        completionPercentageTV = binding.completionPercentageConsultation;
+        timeElapsedPercentageTV = binding.timeElapsedPercentageConsultation;
+        deadlineDateTV = binding.deadlineDateConsultation;
+        buttonSave = binding.buttonSave;
 
 
         // Affichage de l'icône de menu et interaction
@@ -113,12 +113,12 @@ public class TaskConsultationActivity extends AppCompatActivity {
             }
         });
 
-        // Éléments du Layout
-        binding.taskNameConsultationSlider.setValue(Float.parseFloat(getIntent().getStringExtra("selectedTaskCompletionPercentage")));
-        binding.taskNameConsultation.setText(getIntent().getStringExtra("selectedTaskName"));
-        binding.completionPercentageConsultation.setText(getIntent().getStringExtra("selectedTaskCompletionPercentage")+ "%");
-        binding.timeElapsedPercentageConsultation.setText(getIntent().getStringExtra("selectedTaskTimeElapsedPercentage") + "%");
-        binding.deadlineDateConsultation.setText(getIntent().getStringExtra("selectedTaskDeadlineDate"));
+        // Set éléments du Layout
+        slider.setValue(Float.parseFloat(getIntent().getStringExtra("selectedTaskCompletionPercentage")));
+        taskNameTV.setText(getIntent().getStringExtra("selectedTaskName"));
+        completionPercentageTV.setText(getIntent().getStringExtra("selectedTaskCompletionPercentage")+ "%");
+        timeElapsedPercentageTV.setText(getIntent().getStringExtra("selectedTaskTimeElapsedPercentage") + "%");
+        deadlineDateTV.setText(getIntent().getStringExtra("selectedTaskDeadlineDate"));
 
     }
 

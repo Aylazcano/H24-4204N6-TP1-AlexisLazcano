@@ -45,10 +45,10 @@ public class TaskCreationActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        buttonAddTask = findViewById(R.id.buttonAddTask);
-        taskName = findViewById(R.id.editTextTaskName);
-        taskDeadline = findViewById(R.id.deadLineTV);
-        datePicker = findViewById(R.id.datePicker);
+        buttonAddTask = binding.buttonAddTask;
+        taskName = binding.editTextTaskName;
+        taskDeadline = binding.deadLineTV;
+        datePicker = binding.datePicker;
 
         LocalDateTime dt = LocalDateTime.now();
         datePicker.init(dt.getYear(), dt.getMonth().getValue(), dt.getDayOfMonth(), (view1, year, monthOfYear, dayOfMonth) -> {

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        buttonFAB = findViewById(R.id.fab);
+        buttonFAB = binding.fab;
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     // RecyclerView
     private void initRecycler() {
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = binding.recyclerView;
         recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager

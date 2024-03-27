@@ -17,10 +17,10 @@ import com.example.tp1clientandroid.databinding.ActivityInscriptionBinding;
 public class InscriptionActivity extends AppCompatActivity {
     private ActivityInscriptionBinding binding;
 
-//    private EditText editUsername;
-//    private EditText editPassword;
-//    private EditText editConfirmPassword;
-//    private Button buttonSignUp;
+    private EditText editTextUsername;
+    private EditText editTextPassword;
+    private EditText editTextConfirmPassword;
+    private Button buttonSingUp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,15 +31,10 @@ public class InscriptionActivity extends AppCompatActivity {
         setTitle(R.string.inscription_activity_title);
 
         // Recherche des éléments de la vue
-//        editUsername = findViewById(R.id.edit_text_username);
-//        editPassword = findViewById(R.id.edit_text_password);
-//        editConfirmPassword = findViewById(R.id.edit_text_confirm_password);
-//        buttonSignUp = findViewById(R.id.button_sign_up);
-
-        EditText editTextUsername = binding.editTextUsername;
-        EditText editTextPassword = binding.editTextPassword;
-        EditText editTextConfirmPassword = binding.editTextConfirmPassword;
-        Button buttonSingUp = binding.buttonSignUp;
+        editTextUsername = binding.editTextUsername;
+        editTextPassword = binding.editTextPassword;
+        editTextConfirmPassword = binding.editTextConfirmPassword;
+        buttonSingUp = binding.buttonSignUp;
 
 
 

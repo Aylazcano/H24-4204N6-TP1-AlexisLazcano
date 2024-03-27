@@ -29,10 +29,10 @@ public class ConnexionActivity extends AppCompatActivity {
         setTitle(R.string.connexion_activity_title);
 
         // Recherche des éléments de la vue
-        editTextUsername = findViewById(R.id.edit_text_username);
-        editTextPassword = findViewById(R.id.edit_text_password);
-        buttonSignIn = findViewById(R.id.act_connexion_button_sign_in);
-        buttonSignUp = findViewById(R.id.act_connexion_button_sign_up);
+        editTextUsername = binding.editTextUsername;
+        editTextPassword = binding.editTextPassword;
+        buttonSignIn = binding.buttonSignIn;
+        buttonSignUp = binding.buttonSignUp;
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
