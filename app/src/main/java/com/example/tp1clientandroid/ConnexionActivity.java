@@ -2,16 +2,31 @@ package com.example.tp1clientandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tp1clientandroid.databinding.ActivityConnexionBinding;
+import com.example.tp1clientandroid.http.RetrofitUtil;
+import com.example.tp1clientandroid.http.Service;
+
+import org.kickmyb.transfer.SigninRequest;
+import org.kickmyb.transfer.SigninResponse;
+import org.kickmyb.transfer.SignupRequest;
+
+import java.net.CookiePolicy;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ConnexionActivity extends AppCompatActivity {
     private ActivityConnexionBinding binding;
@@ -19,6 +34,10 @@ public class ConnexionActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonSignIn;
     private Button buttonSignUp;
+    private SignupRequest signupRequest;
+    private SigninRequest signinRequest;
+    private CookieManager cookieManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,14 +53,41 @@ public class ConnexionActivity extends AppCompatActivity {
         buttonSignIn = binding.buttonSignIn;
         buttonSignUp = binding.buttonSignUp;
 
-        // Affichage de l'icône de menu et interaction
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
-                startActivity(intent);
+                // Retrofit: SigninRequest
+                signinRequest = new SigninRequest();
+                signinRequest.username = editTextUsername.getText().toString();
+                signinRequest.password = editTextPassword.getText().toString();
+
+                // Retrofit: service Retrofit pour initaliser la connection
+                final Service service = RetrofitUtil.get();
+                service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
+                    @Override
+                    public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
+                        if (!response.isSuccessful()){
+                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        SigninResponse resultat = response.body();
+                        Log.i("RETROFIT", resultat.username + " est connecté");
+                        Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+
+                        //TODO Cookies for user
+
+                        Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        Log.i("RETROFIT", t.getMessage());
+                    }
+                });
+
             }
         });
 
