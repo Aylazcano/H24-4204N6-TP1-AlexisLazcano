@@ -22,8 +22,6 @@ import org.kickmyb.transfer.SigninRequest;
 import org.kickmyb.transfer.SigninResponse;
 import org.kickmyb.transfer.SignupRequest;
 
-import java.net.CookiePolicy;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,6 +45,12 @@ public class ConnexionActivity extends AppCompatActivity {
         setContentView(view);
         setTitle(R.string.connexion_activity_title);
 
+        // Initialisation du gestionnaire de cookies
+        cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
+
+
         // Recherche des éléments de la vue
         editTextUsername = binding.editTextUsername;
         editTextPassword = binding.editTextPassword;
@@ -64,6 +68,7 @@ public class ConnexionActivity extends AppCompatActivity {
 
                 // Retrofit: service Retrofit pour initaliser la connection
                 final Service service = RetrofitUtil.get();
+
                 service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
                     @Override
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {

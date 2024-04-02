@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid.http;
 
+import okhttp3.CookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -13,7 +14,8 @@ public class RetrofitUtil {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client())
-                .baseUrl("https://kickmyb-server-ayl.onrender.com")
+                .baseUrl("http://localhost:8080/api")
+//                .baseUrl("https://kickmyb-server-ayl.onrender.com")
                 .build();
 
         Service service = retrofit.create(Service.class);
@@ -23,8 +25,13 @@ public class RetrofitUtil {
     private static OkHttpClient client() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        CookieJar jar = new SessionCookieJar();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .cookieJar(jar)
+                .addInterceptor(interceptor)
+                .build();
         return client;
+
     }
 
 }
