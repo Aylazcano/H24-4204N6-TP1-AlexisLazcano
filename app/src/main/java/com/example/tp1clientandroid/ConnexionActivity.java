@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,9 +31,6 @@ public class ConnexionActivity extends AppCompatActivity {
     private Button buttonSignIn;
     private Button buttonSignUp;
     private SigninRequest signinRequest;
-    private SigninResponse signinResponse;
-    private CookieManager cookieManager;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,16 +46,13 @@ public class ConnexionActivity extends AppCompatActivity {
         buttonSignIn = binding.buttonSignIn;
         buttonSignUp = binding.buttonSignUp;
 
-
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Retrofit: SigninRequest
                 signinRequest = new SigninRequest();
                 signinRequest.username = editTextUsername.getText().toString();
                 signinRequest.password = editTextPassword.getText().toString();
-
 
                 // Retrofit: service Retrofit pour initaliser la connection
                 final Service service = RetrofitUtil.get();
@@ -68,12 +61,12 @@ public class ConnexionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
+                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                             Log.i("RETROFIT", response.code() + "");
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", resultat.username + " est connecté");
-                            Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
-
+//                            Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -81,7 +74,6 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
-                        Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                         Log.i("RETROFIT", t.getMessage());
                     }
                 });
