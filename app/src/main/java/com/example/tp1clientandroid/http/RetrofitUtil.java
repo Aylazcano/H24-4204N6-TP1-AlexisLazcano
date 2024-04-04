@@ -9,17 +9,21 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitUtil {
 
-    public static Service get(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client())
-                .baseUrl("http://localhost:8080/api")
-//                .baseUrl("https://kickmyb-server-ayl.onrender.com")
-                .build();
+    private static Service instance;
 
-        Service service = retrofit.create(Service.class);
-        return service;
+    public static Service get(){
+        if(instance == null){
+            Retrofit retrofit = new Retrofit.Builder()
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client())
+                    .baseUrl("http://localhost:8080/")
+                    // Déploiement du code serveur sur une instance cloud
+//                    .baseUrl("https://kickmyb-server-ayl.onrender.com/")
+                    .build();
+            instance = retrofit.create(Service.class);
+        }
+        return instance;
     }
 
     private static OkHttpClient client() {

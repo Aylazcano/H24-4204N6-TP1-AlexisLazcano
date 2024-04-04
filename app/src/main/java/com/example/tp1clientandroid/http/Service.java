@@ -17,24 +17,24 @@ import retrofit2.http.Path;
 
 public interface Service {
 
-    @POST("/api/id/signin")
+    @POST("api/id/signin")
     Call<SigninResponse> signin(@Body SigninRequest signinRequest);
 
-    @POST("/api/id/signup")
+    @POST("api/id/signup")
     Call<SigninResponse> signup(@Body SignupRequest signupRequest);
 
-    @POST("/api/id/signout")
+    @POST("api/id/signout")
     Call<String> signout();
 
-    @POST("/api/add")
+    @POST("api/add")
     Call<String> addOne(@Body AddTaskRequest addTaskRequest);
 
-    @GET("/api/progress/{taskID}/{value}")
+    @GET("api/progress/{taskID}/{value}")
     Call<String> updateProgress(@Path("taskID") long taskID, @Path("value") int value);
 
-    @GET("/api/home")
+    @GET("api/home")
     Call<List<HomeItemResponse>> home();
 
-    @GET("/api/detail/{id}")
+    @GET("api//detail/{id}")
     Call<TaskDetailResponse> detail(@Path("id") long id );
 }

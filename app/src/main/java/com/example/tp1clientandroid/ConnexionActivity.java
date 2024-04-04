@@ -20,7 +20,6 @@ import com.example.tp1clientandroid.http.Service;
 
 import org.kickmyb.transfer.SigninRequest;
 import org.kickmyb.transfer.SigninResponse;
-import org.kickmyb.transfer.SignupRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,8 +31,8 @@ public class ConnexionActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonSignIn;
     private Button buttonSignUp;
-    private SignupRequest signupRequest;
     private SigninRequest signinRequest;
+    private SigninResponse signinResponse;
     private CookieManager cookieManager;
 
 
@@ -45,12 +44,6 @@ public class ConnexionActivity extends AppCompatActivity {
         setContentView(view);
         setTitle(R.string.connexion_activity_title);
 
-        // Initialisation du gestionnaire de cookies
-        cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        CookieHandler.setDefault(cookieManager);
-
-
         // Recherche des éléments de la vue
         editTextUsername = binding.editTextUsername;
         editTextPassword = binding.editTextPassword;
@@ -61,34 +54,34 @@ public class ConnexionActivity extends AppCompatActivity {
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Retrofit: SigninRequest
                 signinRequest = new SigninRequest();
                 signinRequest.username = editTextUsername.getText().toString();
                 signinRequest.password = editTextPassword.getText().toString();
 
+
                 // Retrofit: service Retrofit pour initaliser la connection
                 final Service service = RetrofitUtil.get();
-
                 service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
                     @Override
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
-                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                            return;
+                            // Code erreur http 400 404
+                            Log.i("RETROFIT", response.code() + "");
+                        }else{
+                            SigninResponse resultat = response.body();
+                            Log.i("RETROFIT", resultat.username + " est connecté");
+                            Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
+                            startActivity(intent);
                         }
-
-                        SigninResponse resultat = response.body();
-                        Log.i("RETROFIT", resultat.username + " est connecté");
-                        Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
-
-                        //TODO Cookies for user
-
-                        Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
-                        startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                         Log.i("RETROFIT", t.getMessage());
                     }
                 });
