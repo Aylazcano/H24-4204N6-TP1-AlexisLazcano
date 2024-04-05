@@ -70,10 +70,11 @@ public class InscriptionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
-                            Log.i("RETROFIT", response.code() + "");
+                            Log.i("RETROFIT", response.code() + " service.signup(signupRequest) onResponse 400");
                         }else{
                             SigninResponse resultat = response.body();
-//                            Toast.makeText(InscriptionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                            Log.i("RETROFIT", response.body().username + " est inscrit!");
+                            Toast.makeText(InscriptionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -82,7 +83,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
                         Toast.makeText(InscriptionActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.i("RETROFIT", t.getMessage());
+                        Log.i("RETROFIT", t.getMessage() + "service.signup(signupRequest) onFailure");
                     }
                 });
 

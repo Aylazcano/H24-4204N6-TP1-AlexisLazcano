@@ -62,10 +62,10 @@ public class ConnexionActivity extends AppCompatActivity {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
                             Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                            Log.i("RETROFIT", response.code() + "");
+                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse 400");
                         }else{
                             SigninResponse resultat = response.body();
-                            Log.i("RETROFIT", resultat.username + " est connecté");
+                            Log.i("RETROFIT", resultat.username + " est connecté!");
                             Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -74,7 +74,7 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
-                        Log.i("RETROFIT", t.getMessage());
+                        Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
                     }
                 });
 

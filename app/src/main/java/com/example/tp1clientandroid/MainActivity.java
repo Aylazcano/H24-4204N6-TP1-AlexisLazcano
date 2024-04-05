@@ -152,10 +152,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<HomeItemResponse>> call, Response<List<HomeItemResponse>> response) {
                 if (!response.isSuccessful()){
-                    Log.i("RETROFIT", response.code()+" !response.isSuccessful");
+                    Log.i("RETROFIT", response.code()+" service.home() onResponse 400");
                 }else{
                     List<HomeItemResponse> resultat = response.body();
-                    Log.i("RETROFIT", resultat.size()+" response.isSuccessful");
+                    Log.i("RETROFIT", resultat.size()+" service.home() onResponse response.isSuccessful()");
 
                     for (HomeItemResponse item : resultat){
                         Long id = item.id;
