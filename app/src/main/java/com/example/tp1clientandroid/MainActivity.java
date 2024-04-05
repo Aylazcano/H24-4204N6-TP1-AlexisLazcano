@@ -14,9 +14,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
+import com.example.tp1clientandroid.http.AppService;
 import com.example.tp1clientandroid.http.RetrofitUtil;
 import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -100,10 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    Toast.makeText(MainActivity.this, R.string.logout, Toast.LENGTH_SHORT).show();
-                    Log.d("MainActivity", "Utilisateur déconnecté");
-                    i =  new Intent(MainActivity.this, ConnexionActivity.class);
-                    startActivity(i);
+                    AppService.signout(MainActivity.this);
                     return true;
                 }
                 return false;

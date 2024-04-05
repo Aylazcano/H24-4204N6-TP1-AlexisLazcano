@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.databinding.ActivityTaskCreationBinding;
+import com.example.tp1clientandroid.http.AppService;
 import com.example.tp1clientandroid.http.RetrofitUtil;
 import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -160,10 +161,7 @@ public class TaskCreationActivity extends AppCompatActivity {
                     return true;
 
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    Toast.makeText(TaskCreationActivity.this, R.string.logout, Toast.LENGTH_SHORT).show();
-                    Log.d("MainActivity", "Utilisateur déconnecté");
-                    i =  new Intent(TaskCreationActivity.this, ConnexionActivity.class);
-                    startActivity(i);
+                    AppService.signout(TaskCreationActivity.this);
                     return true;
                 }
                 return false;

@@ -70,7 +70,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
-                            Log.i("RETROFIT", response.code() + " service.signup(signupRequest) onResponse 400");
+                            Log.i("RETROFIT", response.code() + " service.signup(signupRequest) onResponse");
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", response.body().username + " est inscrit!");
