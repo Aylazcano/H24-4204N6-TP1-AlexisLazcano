@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,6 +75,7 @@ public class InscriptionActivity extends AppCompatActivity {
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", response.body().username + " est inscrit!");
+                            UserManager.getInstance().setUsername(resultat.username);
                             Toast.makeText(InscriptionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
                             startActivity(intent);

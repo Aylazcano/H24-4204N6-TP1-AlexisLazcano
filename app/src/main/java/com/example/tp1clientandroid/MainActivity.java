@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.http.AppService;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TaskAdapter taskAdapter;
     private RecyclerView recyclerView;
     private FloatingActionButton buttonFAB;
+    private TextView navHeaderUsernameTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
         buttonFAB = binding.fab;
+        navHeaderUsernameTV = findViewById(R.id.nav_header_usernameTV);
+        // Modification : Définition du nom d'utilisateur dans la vue
+       // navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
