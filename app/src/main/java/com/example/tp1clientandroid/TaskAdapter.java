@@ -67,7 +67,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int SelectedTaskPosition = viewHolder.getPosition();
+                int SelectedTaskPosition = viewHolder.getLayoutPosition();
                 Task selectedTask = taskList.get(SelectedTaskPosition);
                 Intent intent = new Intent(view.getContext(),TaskConsultationActivity.class);
                 intent.putExtra("selectedTaskId", selectedTask.id);
