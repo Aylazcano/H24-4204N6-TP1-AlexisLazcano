@@ -66,7 +66,7 @@ public class ConnexionActivity extends AppCompatActivity {
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", resultat.username + " est connecté");
-//                            Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ConnexionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
                             startActivity(intent);
                         }

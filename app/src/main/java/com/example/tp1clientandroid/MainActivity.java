@@ -17,10 +17,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
+import com.example.tp1clientandroid.http.RetrofitUtil;
+import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import org.kickmyb.transfer.HomeItemResponse;
+
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -138,14 +147,34 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(taskAdapter);
     }
     private void fillRecycler() {
-        for (int i = 1; i <= 200; i++) {
-            String taskName = getString(R.string.task_name) + " " + i;
-            int completionPercentage = (int) (Math.random() * 100);
-            Date creationDate = new Date(System.currentTimeMillis() - (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random creation date within the last 30 days
-            Date deadlineDate = new Date(System.currentTimeMillis() + (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random deadline date within the next 30 days
-            taskAdapter.taskList.add(new Task(taskName, completionPercentage, creationDate, deadlineDate));
-        }
-        taskAdapter.notifyDataSetChanged();
+        final Service service = RetrofitUtil.get();
+        service.home().enqueue(new Callback<List<HomeItemResponse>>() {
+            @Override
+            public void onResponse(Call<List<HomeItemResponse>> call, Response<List<HomeItemResponse>> response) {
+                if (!response.isSuccessful()){
+                    Log.i("RETROFIT", response.code()+" !response.isSuccessful");
+                }else{
+                    List<HomeItemResponse> resultat = response.body();
+                    Log.i("RETROFIT", resultat.size()+" response.isSuccessful");
+
+                    for (HomeItemResponse item : resultat){
+                        Long id = item.id;
+                        String taskName = item.name;
+                        int completionPercentage = item.percentageDone;
+                        Date deadlineDate = item.deadline;
+                        double percentageTimeSpent = item.percentageTimeSpent;
+                        taskAdapter.taskList.add(new Task(id, taskName, completionPercentage, percentageTimeSpent, deadlineDate));
+                    }
+                    taskAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<HomeItemResponse>> call, Throwable t) {
+                Log.i("RETROFIT", t.getMessage() + " onFailure");
+            }
+        });
     }
 
 
