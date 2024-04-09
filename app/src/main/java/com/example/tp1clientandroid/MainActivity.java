@@ -56,9 +56,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
         buttonFAB = binding.fab;
-        navHeaderUsernameTV = findViewById(R.id.nav_header_usernameTV);
-        // Modification : Définition du nom d'utilisateur dans la vue
-       // navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
+        // BUG: L'objet binding peut être null avant son initialisation, comme ici :
+        // navHeaderUsernameTV = findViewById(R.id.nav_header_usernameTV);
+        // SOLUTION: Accédez à nav_header_usernameTV depuis la vue NavigationView :
+        // navHeaderUsernameTV = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+        navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+
+
+
+
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
         
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 

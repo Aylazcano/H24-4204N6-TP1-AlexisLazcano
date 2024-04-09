@@ -76,7 +76,7 @@ public class InscriptionActivity extends AppCompatActivity {
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", response.body().username + " est inscrit!");
                             UserManager.getInstance().setUsername(resultat.username);
-                            Toast.makeText(InscriptionActivity.this, R.string.valid_credentials + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(InscriptionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
