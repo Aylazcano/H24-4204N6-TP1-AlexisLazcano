@@ -35,6 +35,6 @@ public interface Service {
     @GET("api/home")
     Call<List<HomeItemResponse>> home();
 
-    @GET("api//detail/{id}")
+    @GET("api/detail/{id}")
     Call<TaskDetailResponse> detail(@Path("id") long id );
 }
