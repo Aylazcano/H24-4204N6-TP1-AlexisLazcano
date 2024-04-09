@@ -32,5 +32,6 @@
     <string name="confirm_password_error">Password and confirm password fields don\'t match</string>
     <string name="invalid_credentials">Invalid credentials</string>
     <string name="valid_credentials">Welcome</string>
-    <string name="task_added">task added</string>
+    <string name="task_added">task added!</string>
+    <string name="task_modified">Task modified!</string>
 </resources>

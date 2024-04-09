@@ -45,8 +45,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     private EditText taskName;
     private TextView taskDeadline;
     private DatePicker datePicker;
-    AddTaskRequest addTaskRequest;
-
+    private TextView navHeaderUsernameTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +62,7 @@ public class TaskCreationActivity extends AppCompatActivity {
         taskName = binding.editTextTaskName;
         taskDeadline = binding.deadLineTV;
         datePicker = binding.datePicker;
+        navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
 
         LocalDateTime dt = LocalDateTime.now();
         datePicker.init(dt.getYear(), dt.getMonth().getValue(), dt.getDayOfMonth(), (view1, year, monthOfYear, dayOfMonth) -> {
@@ -109,8 +109,8 @@ public class TaskCreationActivity extends AppCompatActivity {
                             if (!response.isSuccessful()){
                                 Log.i("RETROFIT", response.code() + " service.addOne(addTaskRequest) onResponse");
                             }else{
-                                Toast.makeText(TaskCreationActivity.this, R.string.task_added, Toast.LENGTH_SHORT).show();
                                 Log.i("RETROFIT", String.valueOf(R.string.task_added));
+                                Toast.makeText(TaskCreationActivity.this, R.string.task_added, Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(TaskCreationActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -144,6 +144,7 @@ public class TaskCreationActivity extends AppCompatActivity {
         // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override

@@ -62,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
         // navHeaderUsernameTV = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
         navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
 
-
-
-
-
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -95,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
-        
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override

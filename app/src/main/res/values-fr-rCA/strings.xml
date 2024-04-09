@@ -32,5 +32,6 @@
     <string name="confirm_password_error">Les mots de passe ne correspondent pas</string>
     <string name="invalid_credentials">Identifiants invalides</string>
     <string name="valid_credentials">Bienvenue</string>
-    <string name="task_added">Tâche ajoutée</string>
+    <string name="task_added">Tâche ajoutée!</string>
+    <string name="task_modified">Tâche modifiée!</string>
 </resources>

@@ -64,7 +64,7 @@ public class ConnexionActivity extends AppCompatActivity {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
                             Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse 400");
+                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse");
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", resultat.username + " est connecté!");

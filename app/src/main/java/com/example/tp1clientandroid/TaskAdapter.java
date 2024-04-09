@@ -71,6 +71,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 Task selectedTask = taskList.get(SelectedTaskPosition);
                 Intent intent = new Intent(view.getContext(),TaskConsultationActivity.class);
                 intent.putExtra("selectedTaskId", selectedTask.id);
+                intent.putExtra("selectedTaskPercentageDone", selectedTask.percentageDone);
                 view.getContext().startActivity(intent);
             }
         });
