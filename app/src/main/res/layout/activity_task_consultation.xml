@@ -104,7 +104,7 @@
                     android:valueTo="100" />
 
                 <Button
-                    android:id="@+id/consultLayout_buttonSave"
+                    android:id="@+id/buttonSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

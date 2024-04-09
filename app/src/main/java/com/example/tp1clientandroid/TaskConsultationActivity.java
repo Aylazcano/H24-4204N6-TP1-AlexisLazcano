@@ -18,10 +18,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.databinding.ActivityTaskConsultationBinding;
+import com.example.tp1clientandroid.http.AppService;
+import com.example.tp1clientandroid.http.RetrofitUtil;
+import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.slider.Slider;
 
+import org.kickmyb.transfer.SigninRequest;
+import org.kickmyb.transfer.TaskDetailResponse;
+
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TaskConsultationActivity extends AppCompatActivity {
     private ActivityTaskConsultationBinding binding;
@@ -32,7 +42,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
     private TextView timeElapsedPercentageTV;
     private TextView deadlineDateTV;
     private Button buttonSave;
-
+    private TextView navHeaderUsernameTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +55,17 @@ public class TaskConsultationActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        slider = findViewById(R.id.taskNameConsultationSlider);
-        taskNameTV = findViewById(R.id.taskNameConsultation);
-        completionPercentageTV = findViewById(R.id.completionPercentageConsultation);
-        timeElapsedPercentageTV = findViewById(R.id.timeElapsedPercentageConsultation);
-        deadlineDateTV = findViewById(R.id.deadlineDateConsultation);
-        buttonSave = findViewById(R.id.consultLayout_buttonSave);
-
+        slider = binding.taskNameConsultationSlider;
+        taskNameTV = binding.taskNameConsultation;
+        completionPercentageTV = binding.completionPercentageConsultation;
+        timeElapsedPercentageTV = binding.timeElapsedPercentageConsultation;
+        deadlineDateTV = binding.deadlineDateConsultation;
+        buttonSave = binding.buttonSave;
+        navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =  new Intent(TaskConsultationActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Changement automatique de l'icône de menu et du titre avec l'action du tiroir
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, dLayout, R.string.drawer_open,R.string.drawer_close){
@@ -77,6 +80,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
         // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -94,13 +98,38 @@ public class TaskConsultationActivity extends AppCompatActivity {
                     return true;
 
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    Toast.makeText(TaskConsultationActivity.this, R.string.logout, Toast.LENGTH_SHORT).show();
-                    Log.d("MainActivity", "Utilisateur déconnecté");
-                    i =  new Intent(TaskConsultationActivity.this, ConnexionActivity.class);
-                    startActivity(i);
+                    AppService.signout(TaskConsultationActivity.this);
                     return true;
                 }
                 return false;
+            }
+        });
+
+        // Set éléments du Layout avec Retrofit
+        // Retrofit: @Path("id") long id
+        long taskID = getIntent().getLongExtra("selectedTaskId", -1);
+        // Retrofit: service Retrofit pour initaliser la connection
+        final Service service = RetrofitUtil.get();
+        service.detail(taskID).enqueue(new Callback<TaskDetailResponse>() {
+            @Override
+            public void onResponse(Call<TaskDetailResponse> call, Response<TaskDetailResponse> response) {
+                if (!response.isSuccessful()){
+                    Log.i("RETROFIT", response.code() + " service.detail(...) onResponse");
+                }else{
+                    Log.i("RETROFIT", response.code() + " service.detail(...) onResponse");
+
+                    TaskDetailResponse resultat = response.body();
+                    slider.setValue(resultat.percentageDone);
+                    taskNameTV.setText(resultat.name);
+                    completionPercentageTV.setText(resultat.percentageDone + "%");
+                    timeElapsedPercentageTV.setText(resultat.percentageTimeSpent + "%");
+                    deadlineDateTV.setText(resultat.deadline.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TaskDetailResponse> call, Throwable t) {
+                Log.i("RETROFIT", t.getMessage() + " service.detail(...) onFailure");
             }
         });
 
@@ -108,18 +137,39 @@ public class TaskConsultationActivity extends AppCompatActivity {
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                String newCompletionPercentage = String.valueOf((int) value) + "%";
-                completionPercentageTV.setText(newCompletionPercentage);
+                String sliderCompletionPercentage = String.valueOf((int) value) + "%";
+                completionPercentageTV.setText(sliderCompletionPercentage);
             }
         });
 
-        // Éléments du Layout
-        binding.taskNameConsultationSlider.setValue(Float.parseFloat(getIntent().getStringExtra("selectedTaskCompletionPercentage")));
-        binding.taskNameConsultation.setText(getIntent().getStringExtra("selectedTaskName"));
-        binding.completionPercentageConsultation.setText(getIntent().getStringExtra("selectedTaskCompletionPercentage")+ "%");
-        binding.timeElapsedPercentageConsultation.setText(getIntent().getStringExtra("selectedTaskTimeElapsedPercentage") + "%");
-        binding.deadlineDateConsultation.setText(getIntent().getStringExtra("selectedTaskDeadlineDate"));
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Retrofit: @Path("taskID") long taskID, @Path("value") int value
+                long taskID = getIntent().getLongExtra("selectedTaskId", -1);
+                int newTaskPercentageDone = (int) slider.getValue();
+                // Retrofit: service Retrofit pour initaliser la connection
+                final Service service = RetrofitUtil.get();
+                service.updateProgress(taskID,newTaskPercentageDone).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (!response.isSuccessful()){
+                            Log.i("RETROFIT", response.code() + " service.updateProgress(...) onResponse");
+                        }else{
+                            Log.i("RETROFIT", String.valueOf(R.string.task_modified));
+                            Toast.makeText(TaskConsultationActivity.this, R.string.task_modified, Toast.LENGTH_SHORT).show();
+                            Intent intent =  new Intent(TaskConsultationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.i("RETROFIT", t.getMessage() + " service.updateProgress(...) onFailure");
+                    }
+                });
+            }
+        });
     }
 
     // Interaction avec l'icône de menu lorsque l'utilisateur appuie dessus

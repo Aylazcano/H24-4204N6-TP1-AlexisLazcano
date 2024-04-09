@@ -1,7 +1,7 @@
 package com.example.tp1clientandroid;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,32 +50,28 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         Task currentTask = taskList.get(position);
         viewHolder.taskNameTV.setText(currentTask.taskName);
-        viewHolder.deadlineDateTV.setText(currentTask.deadlineDate.toString());
-        viewHolder.completionPercentageTV.setText(String.valueOf(currentTask.completionPercentage) + "%");
-        viewHolder.timeElapsedPercentageTV.setText(String.valueOf(currentTask.timeElapsedPercentage) + "%");
 
         // Format the deadline date to yyyy/MM/dd
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         String formattedDeadlineDate = sdf.format(currentTask.deadlineDate);
         viewHolder.deadlineDateTV.setText(formattedDeadlineDate);
 
+        viewHolder.completionPercentageTV.setText(String.valueOf(currentTask.percentageDone) + "%");
+        viewHolder.timeElapsedPercentageTV.setText(String.valueOf(currentTask.percentageTimeSpent) + "%");
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task selectedTask = taskList.get(position);
+                int SelectedTaskPosition = viewHolder.getLayoutPosition();
+                Task selectedTask = taskList.get(SelectedTaskPosition);
                 Intent intent = new Intent(view.getContext(),TaskConsultationActivity.class);
-
-                intent.putExtra("selectedTaskName", selectedTask.taskName);
-                intent.putExtra("selectedTaskCompletionPercentage", String.valueOf(selectedTask.completionPercentage));
-                intent.putExtra("selectedTaskTimeElapsedPercentage", String.valueOf(selectedTask.timeElapsedPercentage));
-                intent.putExtra("selectedTaskDeadlineDate", formattedDeadlineDate);
-
+                intent.putExtra("selectedTaskId", selectedTask.id);
+                intent.putExtra("selectedTaskPercentageDone", selectedTask.percentageDone);
                 view.getContext().startActivity(intent);
             }
         });

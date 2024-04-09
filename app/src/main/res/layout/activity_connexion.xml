@@ -6,12 +6,13 @@
     android:padding="16dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/_edit_text_username"
+        android:id="@+id/text_input_layout_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/username">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
@@ -19,6 +20,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/password">
@@ -32,14 +34,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/act_connexion_button_sign_in"
+        android:id="@+id/button_sign_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin"
         android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/act_connexion_button_sign_up"
+        android:id="@+id/button_sign_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signup"

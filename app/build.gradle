@@ -34,7 +34,20 @@ android {
 
 dependencies {
 
-    //Appcompat
+    // KickMyB-Library (JitPack)
+    implementation 'com.github.departement-info-cem:KickMyB-Library:31d81e9843'
+    // Fix: java.lang.RuntimeException: Duplicate class com.google.common.util.concurrent.ListenableFuture found in modules guava-19.0 (com.google.guava:guava:19.0) and listenablefuture-1.0 (com.google.guava:listenablefuture:1.0)
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    // Retrofit2
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.5.0'
+    implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.5.0'
+    implementation group: 'com.squareup.retrofit2', name: 'converter-scalars', version: '2.5.0'
+
+    // Cookies
+    implementation group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.14.9'
+
+    // Appcompat
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.appcompat:appcompat-resources:1.6.1'
 

@@ -6,11 +6,11 @@
     android:background="@color/design_default_color_on_secondary">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_header_usernameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/username"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="20dp"
         android:padding="10dp"/>

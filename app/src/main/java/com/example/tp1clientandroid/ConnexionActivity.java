@@ -2,16 +2,29 @@ package com.example.tp1clientandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tp1clientandroid.databinding.ActivityConnexionBinding;
+import com.example.tp1clientandroid.http.RetrofitUtil;
+import com.example.tp1clientandroid.http.Service;
+
+import org.kickmyb.transfer.SigninRequest;
+import org.kickmyb.transfer.SigninResponse;
+import org.w3c.dom.Text;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ConnexionActivity extends AppCompatActivity {
     private ActivityConnexionBinding binding;
@@ -19,6 +32,7 @@ public class ConnexionActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonSignIn;
     private Button buttonSignUp;
+    private SigninRequest signinRequest;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,19 +43,44 @@ public class ConnexionActivity extends AppCompatActivity {
         setTitle(R.string.connexion_activity_title);
 
         // Recherche des éléments de la vue
-        editTextUsername = findViewById(R.id.edit_text_username);
-        editTextPassword = findViewById(R.id.edit_text_password);
-        buttonSignIn = findViewById(R.id.act_connexion_button_sign_in);
-        buttonSignUp = findViewById(R.id.act_connexion_button_sign_up);
-
-        // Affichage de l'icône de menu et interaction
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        editTextUsername = binding.editTextUsername;
+        editTextPassword = binding.editTextPassword;
+        buttonSignIn = binding.buttonSignIn;
+        buttonSignUp = binding.buttonSignUp;
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
-                startActivity(intent);
+                // Retrofit: SigninRequest
+                signinRequest = new SigninRequest();
+                signinRequest.username = editTextUsername.getText().toString();
+                signinRequest.password = editTextPassword.getText().toString();
+
+                // Retrofit: service Retrofit pour initaliser la connection
+                final Service service = RetrofitUtil.get();
+                service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
+                    @Override
+                    public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
+                        if (!response.isSuccessful()){
+                            // Code erreur http 400 404
+                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse");
+                        }else{
+                            SigninResponse resultat = response.body();
+                            Log.i("RETROFIT", resultat.username + " est connecté!");
+                            UserManager.getInstance().setUsername(resultat.username);
+                            Toast.makeText(ConnexionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
+                    }
+                });
+
             }
         });
 

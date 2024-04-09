@@ -14,13 +14,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
+import com.example.tp1clientandroid.http.AppService;
+import com.example.tp1clientandroid.http.RetrofitUtil;
+import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import org.kickmyb.transfer.HomeItemResponse;
+
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -28,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TaskAdapter taskAdapter;
     private RecyclerView recyclerView;
     private FloatingActionButton buttonFAB;
+    private TextView navHeaderUsernameTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +55,12 @@ public class MainActivity extends AppCompatActivity {
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
-        buttonFAB = findViewById(R.id.fab);
+        buttonFAB = binding.fab;
+        // BUG: L'objet binding peut être null avant son initialisation, comme ici :
+        // navHeaderUsernameTV = findViewById(R.id.nav_header_usernameTV);
+        // SOLUTION: Accédez à nav_header_usernameTV depuis la vue NavigationView :
+        // navHeaderUsernameTV = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+        navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         // Tirroir
         dLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        navHeaderUsernameTV.setText(UserManager.getInstance().getUsername());
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -91,10 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    Toast.makeText(MainActivity.this, R.string.logout, Toast.LENGTH_SHORT).show();
-                    Log.d("MainActivity", "Utilisateur déconnecté");
-                    i =  new Intent(MainActivity.this, ConnexionActivity.class);
-                    startActivity(i);
+                    AppService.signout(MainActivity.this);
                     return true;
                 }
                 return false;
@@ -127,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     // RecyclerView
     private void initRecycler() {
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = binding.recyclerView;
         recyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
@@ -138,14 +152,34 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(taskAdapter);
     }
     private void fillRecycler() {
-        for (int i = 1; i <= 200; i++) {
-            String taskName = getString(R.string.task_name) + " " + i;
-            int completionPercentage = (int) (Math.random() * 100);
-            Date creationDate = new Date(System.currentTimeMillis() - (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random creation date within the last 30 days
-            Date deadlineDate = new Date(System.currentTimeMillis() + (long) (Math.random() * 30 * 24 * 60 * 60 * 1000)); // Random deadline date within the next 30 days
-            taskAdapter.taskList.add(new Task(taskName, completionPercentage, creationDate, deadlineDate));
-        }
-        taskAdapter.notifyDataSetChanged();
+        final Service service = RetrofitUtil.get();
+        service.home().enqueue(new Callback<List<HomeItemResponse>>() {
+            @Override
+            public void onResponse(Call<List<HomeItemResponse>> call, Response<List<HomeItemResponse>> response) {
+                if (!response.isSuccessful()){
+                    Log.i("RETROFIT", response.code()+" service.home() onResponse 400");
+                }else{
+                    List<HomeItemResponse> resultat = response.body();
+                    Log.i("RETROFIT", resultat.size()+" service.home() onResponse response.isSuccessful()");
+
+                    for (HomeItemResponse item : resultat){
+                        Long id = item.id;
+                        String taskName = item.name;
+                        int completionPercentage = item.percentageDone;
+                        Date deadlineDate = item.deadline;
+                        double percentageTimeSpent = item.percentageTimeSpent;
+                        taskAdapter.taskList.add(new Task(id, taskName, completionPercentage, percentageTimeSpent, deadlineDate));
+                    }
+                    taskAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<HomeItemResponse>> call, Throwable t) {
+                Log.i("RETROFIT", t.getMessage() + " onFailure");
+            }
+        });
     }
 
 
