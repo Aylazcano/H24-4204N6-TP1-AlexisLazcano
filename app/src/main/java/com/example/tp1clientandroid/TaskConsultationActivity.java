@@ -129,6 +129,8 @@ public class TaskConsultationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TaskDetailResponse> call, Throwable t) {
+                // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
+                // Code 500: Erreur de connection serveur
                 Log.i("RETROFIT", t.getMessage() + " service.detail(...) onFailure");
             }
         });

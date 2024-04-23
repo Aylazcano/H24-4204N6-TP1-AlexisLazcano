@@ -73,17 +73,32 @@ public class InscriptionActivity extends AppCompatActivity {
                             // Code erreur http 400 404
                             Log.i("RETROFIT", response.code() + " service.signup(signupRequest) onResponse");
                         }else{
-                            SigninResponse resultat = response.body();
-                            Log.i("RETROFIT", response.body().username + " est inscrit!");
-                            UserManager.getInstance().setUsername(resultat.username);
-                            Toast.makeText(InscriptionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            // TODO: Message d'erreur a l'Utilisateur (Retrofit Erreur, Throws)
+//                            try {
+                                SigninResponse resultat = response.body();
+                                Log.i("RETROFIT", response.body().username + " est inscrit!");
+                                UserManager.getInstance().setUsername(resultat.username);
+                                Toast.makeText(InscriptionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
+                                startActivity(intent);
+//                            } catch (UsernameTooShort e) {
+//                                // Gérer le nom d'utilisateur trop court
+//                                showErrorDialog("Le nom d'utilisateur est trop court.");
+//                            } catch (PasswordTooShort e) {
+//                                // Gérer le mot de passe trop court
+//                                showErrorDialog("Le mot de passe est trop court.");
+//                            } catch (UsernameAlreadyTaken e) {
+//                                // Gérer le nom d'utilisateur déjà pris
+//                                showErrorDialog("Le nom d'utilisateur est déjà pris.");
+//                            }
+
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
+                        // Code 500: Erreur de connection serveur
                         Toast.makeText(InscriptionActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.i("RETROFIT", t.getMessage() + "service.signup(signupRequest) onFailure");
                     }

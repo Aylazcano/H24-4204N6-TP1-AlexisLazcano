@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<HomeItemResponse>> call, Throwable t) {
+                // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
+                // Code 500: Erreur de connection serveur
                 Log.i("RETROFIT", t.getMessage() + " onFailure");
             }
         });

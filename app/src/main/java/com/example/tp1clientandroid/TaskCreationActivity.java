@@ -109,6 +109,7 @@ public class TaskCreationActivity extends AppCompatActivity {
                             if (!response.isSuccessful()){
                                 Log.i("RETROFIT", response.code() + " service.addOne(addTaskRequest) onResponse");
                             }else{
+                                // TODO: Message d'erreur a l'Utilisateur (Retrofit Erreur, Throws)
                                 Log.i("RETROFIT", String.valueOf(R.string.task_added));
                                 Toast.makeText(TaskCreationActivity.this, R.string.task_added, Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(TaskCreationActivity.this, MainActivity.class);
@@ -118,6 +119,8 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
+                            // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
+                            // Code 500: Erreur de connection serveur
                             Log.i("RETROFIT", t.getMessage() + " service.addOne(addTaskRequest) onFailure");
                         }
                     });

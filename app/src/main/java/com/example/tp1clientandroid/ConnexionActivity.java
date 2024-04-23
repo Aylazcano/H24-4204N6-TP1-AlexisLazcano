@@ -63,6 +63,7 @@ public class ConnexionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
+                            // TODO: ameliorer le message (snack, dialogue?)
                             Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                             Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse");
                         }else{
@@ -77,6 +78,8 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
+                        // Code 500: Erreur de connection serveur
                         Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
                     }
                 });
