@@ -22,6 +22,8 @@ import org.kickmyb.transfer.SigninRequest;
 import org.kickmyb.transfer.SigninResponse;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,8 +66,20 @@ public class ConnexionActivity extends AppCompatActivity {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
                             // TODO: ameliorer le message (snack, dialogue?)
-                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse");
+                            try {
+                                String corpsErreur = response.errorBody().string();
+                                Log.i("RETROFIT", "le code " + response.code());
+                                Log.i("RETROFIT", "le message " + response.message());
+                                Log.i("RETROFIT", "le corps " + corpsErreur);
+                                Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
+                                if (corpsErreur.contains("InternalAuthenticationServiceException")) {
+                                    // TODO remplacer par un objet graphique mieux qu'un toast
+                                    Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", resultat.username + " est connecté!");
