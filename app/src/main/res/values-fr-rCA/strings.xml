@@ -34,4 +34,7 @@
     <string name="valid_credentials">Bienvenue</string>
     <string name="task_added">Tâche ajoutée!</string>
     <string name="task_modified">Tâche modifiée!</string>
+    <string name="username_too_short">Le nom d’utilisateur doit comporter au moins 2 caractères</string>
+    <string name="password_too_short">Le mot de passe doit comporter au moins 4 caractères</string>
+    <string name="username_already_taken">Le nom d’utilisateur est déjà utilisé</string>
 </resources>

@@ -21,6 +21,8 @@ import com.example.tp1clientandroid.http.Service;
 import org.kickmyb.transfer.SigninResponse;
 import org.kickmyb.transfer.SignupRequest;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,27 +73,34 @@ public class InscriptionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
-                            Log.i("RETROFIT", response.code() + " service.signup(signupRequest) onResponse");
+                            try {
+                                String corpsErreur = response.errorBody().string();
+                                Log.i("RETROFIT", "le code " + response.code());
+                                Log.i("RETROFIT", "le message " + response.message());
+                                Log.i("RETROFIT", "le corps " + corpsErreur);
+                                Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
+                                if (corpsErreur.contains("UsernameTooShort")) {
+                                    // TODO remplacer par un objet graphique mieux qu'un toast
+                                    Toast.makeText(InscriptionActivity.this, R.string.username_too_short, Toast.LENGTH_SHORT).show();
+                                }
+                                if (corpsErreur.contains("PasswordTooShort")) {
+                                    // TODO remplacer par un objet graphique mieux qu'un toast
+                                    Toast.makeText(InscriptionActivity.this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
+                                }
+                                if (corpsErreur.contains("UsernameAlreadyTaken")) {
+                                    // TODO remplacer par un objet graphique mieux qu'un toast
+                                    Toast.makeText(InscriptionActivity.this, R.string.username_already_taken, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }else{
-                            // TODO: Message d'erreur a l'Utilisateur (Retrofit Erreur, Throws)
-//                            try {
-                                SigninResponse resultat = response.body();
-                                Log.i("RETROFIT", response.body().username + " est inscrit!");
-                                UserManager.getInstance().setUsername(resultat.username);
-                                Toast.makeText(InscriptionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
-                                startActivity(intent);
-//                            } catch (UsernameTooShort e) {
-//                                // Gérer le nom d'utilisateur trop court
-//                                showErrorDialog("Le nom d'utilisateur est trop court.");
-//                            } catch (PasswordTooShort e) {
-//                                // Gérer le mot de passe trop court
-//                                showErrorDialog("Le mot de passe est trop court.");
-//                            } catch (UsernameAlreadyTaken e) {
-//                                // Gérer le nom d'utilisateur déjà pris
-//                                showErrorDialog("Le nom d'utilisateur est déjà pris.");
-//                            }
-
+                            SigninResponse resultat = response.body();
+                            Log.i("RETROFIT", response.body().username + " est inscrit!");
+                            UserManager.getInstance().setUsername(resultat.username);
+                            Toast.makeText(InscriptionActivity.this, getString(R.string.valid_credentials) + " " + resultat.username + "!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(InscriptionActivity.this, MainActivity.class);
+                            startActivity(intent);
                         }
                     }
 
@@ -103,10 +112,6 @@ public class InscriptionActivity extends AppCompatActivity {
                         Log.i("RETROFIT", t.getMessage() + "service.signup(signupRequest) onFailure");
                     }
                 });
-
-
-
-
 
             }
         });
