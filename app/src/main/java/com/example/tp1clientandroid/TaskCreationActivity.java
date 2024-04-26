@@ -28,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.kickmyb.transfer.AddTaskRequest;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -107,7 +108,28 @@ public class TaskCreationActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
                             if (!response.isSuccessful()){
-                                Log.i("RETROFIT", response.code() + " service.addOne(addTaskRequest) onResponse");
+                                // ERROR ERROR ERROR
+                                try {
+                                    String corpsErreur = response.errorBody().string();
+                                    Log.i("RETROFIT", "le code " + response.code());
+                                    Log.i("RETROFIT", "le message " + response.message());
+                                    Log.i("RETROFIT", "le corps " + corpsErreur);
+                                    Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
+                                    if (corpsErreur.contains("Existing")) {
+                                        // TODO remplacer par un objet graphique mieux qu'un toast
+                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_exist, Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (corpsErreur.contains("Empty")) {
+                                        // TODO remplacer par un objet graphique mieux qu'un toast
+                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_empty, Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (corpsErreur.contains("TooShort")) {
+                                        // TODO remplacer par un objet graphique mieux qu'un toast
+                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_too_short, Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }else{
                                 // TODO: Message d'erreur a l'Utilisateur (Retrofit Erreur, Throws)
                                 Log.i("RETROFIT", String.valueOf(R.string.task_added));

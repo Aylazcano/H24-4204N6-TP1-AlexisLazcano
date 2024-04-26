@@ -76,6 +76,10 @@ public class ConnexionActivity extends AppCompatActivity {
                                     // TODO remplacer par un objet graphique mieux qu'un toast
                                     Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                                 }
+                                if (corpsErreur.contains("BadCredentialsException")) {
+                                    // TODO remplacer par un objet graphique mieux qu'un toast
+                                    Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

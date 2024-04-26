@@ -37,4 +37,7 @@
     <string name="username_too_short">Le nom d’utilisateur doit comporter au moins 2 caractères</string>
     <string name="password_too_short">Le mot de passe doit comporter au moins 4 caractères</string>
     <string name="username_already_taken">Le nom d’utilisateur est déjà utilisé</string>
+    <string name="task_name_exist">Ce nom de tâche existe déjà</string>
+    <string name="task_name_empty">Le nom de la tâche ne peut pas être vide</string>
+    <string name="task_name_too_short">Le nom de la tâche doit comporter au moins 2 caractères</string>
 </resources>

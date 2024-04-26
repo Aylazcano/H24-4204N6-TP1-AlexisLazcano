@@ -37,4 +37,7 @@
     <string name="username_too_short">Username must be at least 2 characters long</string>
     <string name="password_too_short">Password must be at least 4 characters long</string>
     <string name="username_already_taken">Username is already taken</string>
+    <string name="task_name_exist">This task name already exists</string>
+    <string name="task_name_empty">Task name cannot be empty</string>
+    <string name="task_name_too_short">Task name must be at least 2 characters long</string>
 </resources>
