@@ -40,4 +40,6 @@
     <string name="task_name_exist">Ce nom de tâche existe déjà</string>
     <string name="task_name_empty">Le nom de la tâche ne peut pas être vide</string>
     <string name="task_name_too_short">Le nom de la tâche doit comporter au moins 2 caractères</string>
+    <string name="error_dialog_title">Erreur</string>
+    <string name="error_network">Une erreur réseau s\'est produite. Veuillez réessayer plus tard.</string>
 </resources>

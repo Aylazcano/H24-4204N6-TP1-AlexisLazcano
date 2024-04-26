@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import com.example.tp1clientandroid.databinding.ActivityConnexionBinding;
 import com.example.tp1clientandroid.http.RetrofitUtil;
@@ -65,7 +68,6 @@ public class ConnexionActivity extends AppCompatActivity {
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
-                            // TODO: ameliorer le message (snack, dialogue?)
                             try {
                                 String corpsErreur = response.errorBody().string();
                                 Log.i("RETROFIT", "le code " + response.code());
@@ -73,12 +75,10 @@ public class ConnexionActivity extends AppCompatActivity {
                                 Log.i("RETROFIT", "le corps " + corpsErreur);
                                 Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
                                 if (corpsErreur.contains("InternalAuthenticationServiceException")) {
-                                    // TODO remplacer par un objet graphique mieux qu'un toast
-                                    Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(binding.getRoot(), R.string.invalid_credentials, Snackbar.LENGTH_SHORT).show();
                                 }
                                 if (corpsErreur.contains("BadCredentialsException")) {
-                                    // TODO remplacer par un objet graphique mieux qu'un toast
-                                    Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(binding.getRoot(), R.string.invalid_credentials, Snackbar.LENGTH_SHORT).show();
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -96,9 +96,20 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
-                        // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
                         // Code 500: Erreur de connection serveur
                         Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ConnexionActivity.this);
+                        builder.setTitle(R.string.error_dialog_title)
+                                .setMessage(R.string.error_network)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Fermer le dialogue
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(R.drawable.error_icon)
+                                .show();
+
                     }
                 });
 

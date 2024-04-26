@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,16 +16,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.databinding.ActivityTaskCreationBinding;
 import com.example.tp1clientandroid.http.AppService;
 import com.example.tp1clientandroid.http.RetrofitUtil;
 import com.example.tp1clientandroid.http.Service;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.kickmyb.transfer.AddTaskRequest;
 
@@ -69,7 +71,6 @@ public class TaskCreationActivity extends AppCompatActivity {
         datePicker.init(dt.getYear(), dt.getMonth().getValue(), dt.getDayOfMonth(), (view1, year, monthOfYear, dayOfMonth) -> {
             taskDeadline.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
         });
-
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -116,22 +117,18 @@ public class TaskCreationActivity extends AppCompatActivity {
                                     Log.i("RETROFIT", "le corps " + corpsErreur);
                                     Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
                                     if (corpsErreur.contains("Existing")) {
-                                        // TODO remplacer par un objet graphique mieux qu'un toast
-                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_exist, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(binding.getRoot(), R.string.task_name_exist, Snackbar.LENGTH_SHORT).show();
                                     }
                                     if (corpsErreur.contains("Empty")) {
-                                        // TODO remplacer par un objet graphique mieux qu'un toast
-                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_empty, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(binding.getRoot(), R.string.task_name_empty, Snackbar.LENGTH_SHORT).show();
                                     }
                                     if (corpsErreur.contains("TooShort")) {
-                                        // TODO remplacer par un objet graphique mieux qu'un toast
-                                        Toast.makeText(TaskCreationActivity.this, R.string.task_name_too_short, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(binding.getRoot(), R.string.task_name_too_short, Snackbar.LENGTH_SHORT).show();
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             }else{
-                                // TODO: Message d'erreur a l'Utilisateur (Retrofit Erreur, Throws)
                                 Log.i("RETROFIT", String.valueOf(R.string.task_added));
                                 Toast.makeText(TaskCreationActivity.this, R.string.task_added, Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(TaskCreationActivity.this, MainActivity.class);
@@ -141,9 +138,19 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
-                            // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
                             // Code 500: Erreur de connection serveur
                             Log.i("RETROFIT", t.getMessage() + " service.addOne(addTaskRequest) onFailure");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(TaskCreationActivity.this);
+                            builder.setTitle(R.string.error_dialog_title)
+                                    .setMessage(R.string.error_network)
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Fermer le dialogue
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setIcon(R.drawable.error_icon)
+                                    .show();
                         }
                     });
 

@@ -40,4 +40,6 @@
     <string name="task_name_exist">This task name already exists</string>
     <string name="task_name_empty">Task name cannot be empty</string>
     <string name="task_name_too_short">Task name must be at least 2 characters long</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_network">A network error occurred. Please try again later.</string>
 </resources>

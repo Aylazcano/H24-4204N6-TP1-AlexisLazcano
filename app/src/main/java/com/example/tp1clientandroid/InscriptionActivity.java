@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import com.example.tp1clientandroid.databinding.ActivityInscriptionBinding;
 import com.example.tp1clientandroid.http.RetrofitUtil;
@@ -80,16 +83,13 @@ public class InscriptionActivity extends AppCompatActivity {
                                 Log.i("RETROFIT", "le corps " + corpsErreur);
                                 Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
                                 if (corpsErreur.contains("UsernameTooShort")) {
-                                    // TODO remplacer par un objet graphique mieux qu'un toast
-                                    Toast.makeText(InscriptionActivity.this, R.string.username_too_short, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(binding.getRoot(), R.string.username_too_short, Snackbar.LENGTH_SHORT).show();
                                 }
                                 if (corpsErreur.contains("PasswordTooShort")) {
-                                    // TODO remplacer par un objet graphique mieux qu'un toast
-                                    Toast.makeText(InscriptionActivity.this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(binding.getRoot(), R.string.password_too_short, Snackbar.LENGTH_SHORT).show();
                                 }
                                 if (corpsErreur.contains("UsernameAlreadyTaken")) {
-                                    // TODO remplacer par un objet graphique mieux qu'un toast
-                                    Toast.makeText(InscriptionActivity.this, R.string.username_already_taken, Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(binding.getRoot(), R.string.username_already_taken, Snackbar.LENGTH_SHORT).show();
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -106,10 +106,19 @@ public class InscriptionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
-                        // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
                         // Code 500: Erreur de connection serveur
-                        Toast.makeText(InscriptionActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.i("RETROFIT", t.getMessage() + "service.signup(signupRequest) onFailure");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionActivity.this);
+                        builder.setTitle(R.string.error_dialog_title)
+                                .setMessage(R.string.error_network)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Fermer le dialogue
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(R.drawable.error_icon)
+                                .show();
                     }
                 });
 
