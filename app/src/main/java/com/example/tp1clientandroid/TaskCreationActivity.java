@@ -154,9 +154,6 @@ public class TaskCreationActivity extends AppCompatActivity {
                         }
                     });
 
-
-
-
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

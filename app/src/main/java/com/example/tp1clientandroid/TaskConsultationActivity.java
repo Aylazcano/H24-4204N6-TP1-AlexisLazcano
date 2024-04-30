@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -129,9 +131,19 @@ public class TaskConsultationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TaskDetailResponse> call, Throwable t) {
-                // TODO: Message d'erreur code 500 a l'Utilisateur: Erreur de connection au serveur
                 // Code 500: Erreur de connection serveur
                 Log.i("RETROFIT", t.getMessage() + " service.detail(...) onFailure");
+                AlertDialog.Builder builder = new AlertDialog.Builder(TaskConsultationActivity.this);
+                builder.setTitle(R.string.error_dialog_title)
+                        .setMessage(R.string.error_network)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Fermer le dialogue
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(R.drawable.error_icon)
+                        .show();
             }
         });
 
