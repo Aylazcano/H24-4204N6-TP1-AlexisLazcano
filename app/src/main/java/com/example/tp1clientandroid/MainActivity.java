@@ -66,6 +66,22 @@ public class MainActivity extends AppCompatActivity {
         this.initRecycler();
         this.fillRecycler();
 
+        // Ajout du SwipeRefreshLayout.OnRefreshListener
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout mySwipeRefreshLayout = binding.swiperefresh;
+        mySwipeRefreshLayout.setOnRefreshListener(new androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("SwipeRefreshLayout", "onRefresh called from SwipeRefreshLayout");
+
+                // This method performs the actual data-refresh operation.
+                initRecycler();
+                fillRecycler();
+
+                // Signal that the refresh has finished
+                mySwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

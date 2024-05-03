@@ -75,6 +75,11 @@ public class InscriptionActivity extends AppCompatActivity {
                 String confirmPassword = editTextConfirmPassword.getText().toString();
 
                 if (!signupRequest.password.equals(confirmPassword)){
+                    // Réactiver le bouton
+                    buttonSingUp.setEnabled(true);
+
+                    // Masquer l'indicateur de progression
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(InscriptionActivity.this, R.string.confirm_password_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
