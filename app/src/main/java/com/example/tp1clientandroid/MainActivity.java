@@ -3,11 +3,13 @@ package com.example.tp1clientandroid;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +17,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+// ProgressBar
+import android.widget.ProgressBar;
 
 import com.example.tp1clientandroid.databinding.ActivityMainBinding;
 import com.example.tp1clientandroid.http.AppService;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton buttonFAB;
     private TextView navHeaderUsernameTV;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +54,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
         setTitle(R.string.main_activity_title);
 
-        // initialisation du recycler
-        this.initRecycler();
-        this.fillRecycler();
-
         // Recherche des éléments de la vue
         NavigationView nv = binding.navView;
         DrawerLayout dLayout = binding.drawerLayout;
         buttonFAB = binding.fab;
-        // BUG: L'objet binding peut être null avant son initialisation, comme ici :
-        // navHeaderUsernameTV = findViewById(R.id.nav_header_usernameTV);
-        // SOLUTION: Accédez à nav_header_usernameTV depuis la vue NavigationView :
         // navHeaderUsernameTV = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
         navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+        progressBar = binding.progressBar;
+
+        // initialisation du recycler
+        this.initRecycler();
+        this.fillRecycler();
+
+        // Ajout du SwipeRefreshLayout.OnRefreshListener
+        androidx.swiperefreshlayout.widget.SwipeRefreshLayout mySwipeRefreshLayout = binding.swiperefresh;
+        mySwipeRefreshLayout.setOnRefreshListener(new androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("SwipeRefreshLayout", "onRefresh called from SwipeRefreshLayout");
+
+                // This method performs the actual data-refresh operation.
+                initRecycler();
+                fillRecycler();
+
+                // Signal that the refresh has finished
+                mySwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -153,9 +173,15 @@ public class MainActivity extends AppCompatActivity {
     }
     private void fillRecycler() {
         final Service service = RetrofitUtil.get();
+        // Afficher l'indicateur de progression
+        progressBar.setVisibility(View.VISIBLE);
+
         service.home().enqueue(new Callback<List<HomeItemResponse>>() {
             @Override
             public void onResponse(Call<List<HomeItemResponse>> call, Response<List<HomeItemResponse>> response) {
+                // Masquer l'indicateur de progression
+                progressBar.setVisibility(View.GONE);
+
                 if (!response.isSuccessful()){
                     Log.i("RETROFIT", response.code()+" service.home() onResponse 400");
                 }else{
@@ -177,7 +203,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<HomeItemResponse>> call, Throwable t) {
-                Log.i("RETROFIT", t.getMessage() + " onFailure");
+                // Masquer l'indicateur de progression
+                progressBar.setVisibility(View.GONE);
+
+                // Code 500: Erreur de connection serveur
+                Log.i("RETROFIT", t.getMessage() + "service.home() onFailure");
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.error_dialog_title)
+                        .setMessage(R.string.error_network)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Fermer le dialogue
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(R.drawable.error_icon)
+                        .show();
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -43,6 +46,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
     private TextView deadlineDateTV;
     private Button buttonSave;
     private TextView navHeaderUsernameTV;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class TaskConsultationActivity extends AppCompatActivity {
         deadlineDateTV = binding.deadlineDateConsultation;
         buttonSave = binding.buttonSave;
         navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+        progressBar = binding.progressBar;
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,9 +115,15 @@ public class TaskConsultationActivity extends AppCompatActivity {
         long taskID = getIntent().getLongExtra("selectedTaskId", -1);
         // Retrofit: service Retrofit pour initaliser la connection
         final Service service = RetrofitUtil.get();
+
+        // Afficher l'indicateur de progression
+        progressBar.setVisibility(View.VISIBLE);
         service.detail(taskID).enqueue(new Callback<TaskDetailResponse>() {
             @Override
             public void onResponse(Call<TaskDetailResponse> call, Response<TaskDetailResponse> response) {
+                // Masquer l'indicateur de progression
+                progressBar.setVisibility(View.GONE);
+
                 if (!response.isSuccessful()){
                     Log.i("RETROFIT", response.code() + " service.detail(...) onResponse");
                 }else{
@@ -129,7 +140,22 @@ public class TaskConsultationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TaskDetailResponse> call, Throwable t) {
+                // Masquer l'indicateur de progression
+                progressBar.setVisibility(View.GONE);
+
+                // Code 500: Erreur de connection serveur
                 Log.i("RETROFIT", t.getMessage() + " service.detail(...) onFailure");
+                AlertDialog.Builder builder = new AlertDialog.Builder(TaskConsultationActivity.this);
+                builder.setTitle(R.string.error_dialog_title)
+                        .setMessage(R.string.error_network)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Fermer le dialogue
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(R.drawable.error_icon)
+                        .show();
             }
         });
 
@@ -145,6 +171,12 @@ public class TaskConsultationActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Désactiver le bouton pendant l'envoi de la requête
+                buttonSave.setEnabled(false);
+
+                // Afficher l'indicateur de progression
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Retrofit: @Path("taskID") long taskID, @Path("value") int value
                 long taskID = getIntent().getLongExtra("selectedTaskId", -1);
                 int newTaskPercentageDone = (int) slider.getValue();
@@ -153,6 +185,12 @@ public class TaskConsultationActivity extends AppCompatActivity {
                 service.updateProgress(taskID,newTaskPercentageDone).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+                        // Réactiver le bouton
+                        buttonSave.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         if (!response.isSuccessful()){
                             Log.i("RETROFIT", response.code() + " service.updateProgress(...) onResponse");
                         }else{
@@ -165,7 +203,24 @@ public class TaskConsultationActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+                        // Réactiver le bouton
+                        buttonSave.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         Log.i("RETROFIT", t.getMessage() + " service.updateProgress(...) onFailure");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TaskConsultationActivity.this);
+                        builder.setTitle(R.string.error_dialog_title)
+                                .setMessage(R.string.error_network)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Fermer le dialogue
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(R.drawable.error_icon)
+                                .show();
                     }
                 });
             }

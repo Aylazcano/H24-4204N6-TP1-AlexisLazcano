@@ -1,5 +1,6 @@
 package com.example.tp1clientandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import com.example.tp1clientandroid.databinding.ActivityConnexionBinding;
 import com.example.tp1clientandroid.http.RetrofitUtil;
@@ -20,7 +24,8 @@ import com.example.tp1clientandroid.http.Service;
 
 import org.kickmyb.transfer.SigninRequest;
 import org.kickmyb.transfer.SigninResponse;
-import org.w3c.dom.Text;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +38,7 @@ public class ConnexionActivity extends AppCompatActivity {
     private Button buttonSignIn;
     private Button buttonSignUp;
     private SigninRequest signinRequest;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,10 +53,17 @@ public class ConnexionActivity extends AppCompatActivity {
         editTextPassword = binding.editTextPassword;
         buttonSignIn = binding.buttonSignIn;
         buttonSignUp = binding.buttonSignUp;
+        progressBar = binding.progressBar;
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Désactiver le bouton pendant l'envoi de la requête
+                buttonSignIn.setEnabled(false);
+
+                // Afficher l'indicateur de progression
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Retrofit: SigninRequest
                 signinRequest = new SigninRequest();
                 signinRequest.username = editTextUsername.getText().toString();
@@ -61,10 +74,30 @@ public class ConnexionActivity extends AppCompatActivity {
                 service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
                     @Override
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
+                        // Réactiver le bouton
+                        buttonSignIn.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
-                            Toast.makeText(ConnexionActivity.this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                            Log.i("RETROFIT", response.code() + " service.signin(signinRequest) onResponse");
+                            try {
+                                String corpsErreur = response.errorBody().string();
+                                Log.i("RETROFIT", "le code " + response.code());
+                                Log.i("RETROFIT", "le message " + response.message());
+                                Log.i("RETROFIT", "le corps " + corpsErreur);
+                                Log.i("RETROFIT", "le corps encore " + response.errorBody().string());
+                                if (corpsErreur.contains("InternalAuthenticationServiceException")) {
+                                    Snackbar.make(binding.getRoot(), R.string.invalid_credentials, Snackbar.LENGTH_SHORT).show();
+                                }
+                                if (corpsErreur.contains("BadCredentialsException")) {
+                                    Snackbar.make(binding.getRoot(), R.string.invalid_credentials, Snackbar.LENGTH_SHORT).show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }else{
                             SigninResponse resultat = response.body();
                             Log.i("RETROFIT", resultat.username + " est connecté!");
@@ -77,7 +110,26 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        // Réactiver le bouton
+                        buttonSignIn.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
+                        // Code 500: Erreur de connection serveur
                         Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ConnexionActivity.this);
+                        builder.setTitle(R.string.error_dialog_title)
+                                .setMessage(R.string.error_network)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Fermer le dialogue
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setIcon(R.drawable.error_icon)
+                                .show();
+
                     }
                 });
 
