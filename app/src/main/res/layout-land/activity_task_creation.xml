@@ -83,6 +83,15 @@
 
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                />
+
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +24,6 @@ import com.example.tp1clientandroid.http.Service;
 
 import org.kickmyb.transfer.SigninRequest;
 import org.kickmyb.transfer.SigninResponse;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -38,6 +38,7 @@ public class ConnexionActivity extends AppCompatActivity {
     private Button buttonSignIn;
     private Button buttonSignUp;
     private SigninRequest signinRequest;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,10 +53,17 @@ public class ConnexionActivity extends AppCompatActivity {
         editTextPassword = binding.editTextPassword;
         buttonSignIn = binding.buttonSignIn;
         buttonSignUp = binding.buttonSignUp;
+        progressBar = binding.progressBar;
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Désactiver le bouton pendant l'envoi de la requête
+                buttonSignIn.setEnabled(false);
+
+                // Afficher l'indicateur de progression
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Retrofit: SigninRequest
                 signinRequest = new SigninRequest();
                 signinRequest.username = editTextUsername.getText().toString();
@@ -66,6 +74,12 @@ public class ConnexionActivity extends AppCompatActivity {
                 service.signin(signinRequest).enqueue(new Callback<SigninResponse>() {
                     @Override
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
+                        // Réactiver le bouton
+                        buttonSignIn.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
                             try {
@@ -96,6 +110,12 @@ public class ConnexionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        // Réactiver le bouton
+                        buttonSignIn.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         // Code 500: Erreur de connection serveur
                         Log.i("RETROFIT", t.getMessage() + " service.signin(signinRequest) onFailure");
                         AlertDialog.Builder builder = new AlertDialog.Builder(ConnexionActivity.this);

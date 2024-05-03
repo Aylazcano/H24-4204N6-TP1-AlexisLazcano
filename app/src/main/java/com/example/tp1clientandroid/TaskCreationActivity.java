@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +50,7 @@ public class TaskCreationActivity extends AppCompatActivity {
     private TextView taskDeadline;
     private DatePicker datePicker;
     private TextView navHeaderUsernameTV;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class TaskCreationActivity extends AppCompatActivity {
         taskDeadline = binding.deadLineTV;
         datePicker = binding.datePicker;
         navHeaderUsernameTV = nv.getHeaderView(0).findViewById(R.id.nav_header_usernameTV);
+        progressBar = binding.progressBar;
 
         LocalDateTime dt = LocalDateTime.now();
         datePicker.init(dt.getYear(), dt.getMonth().getValue(), dt.getDayOfMonth(), (view1, year, monthOfYear, dayOfMonth) -> {
@@ -78,6 +81,12 @@ public class TaskCreationActivity extends AppCompatActivity {
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Désactiver le bouton pendant l'envoi de la requête
+                buttonAddTask.setEnabled(false);
+
+                // Afficher l'indicateur de progression
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Récupérer la date sélectionnée du DatePicker
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
@@ -106,8 +115,15 @@ public class TaskCreationActivity extends AppCompatActivity {
                     // Retrofit: service Retrofit pour initaliser la connection
                     final Service service = RetrofitUtil.get();
                     service.addOne(addTaskRequest).enqueue(new Callback<String>() {
+
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
+                            // Réactiver le bouton
+                            buttonAddTask.setEnabled(true);
+
+                            // Masquer l'indicateur de progression
+                            progressBar.setVisibility(View.GONE);
+
                             if (!response.isSuccessful()){
                                 // ERROR ERROR ERROR
                                 try {
@@ -138,6 +154,12 @@ public class TaskCreationActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
+                            // Réactiver le bouton
+                            buttonAddTask.setEnabled(true);
+
+                            // Masquer l'indicateur de progression
+                            progressBar.setVisibility(View.GONE);
+
                             // Code 500: Erreur de connection serveur
                             Log.i("RETROFIT", t.getMessage() + " service.addOne(addTaskRequest) onFailure");
                             AlertDialog.Builder builder = new AlertDialog.Builder(TaskCreationActivity.this);

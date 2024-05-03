@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class InscriptionActivity extends AppCompatActivity {
     private EditText editTextConfirmPassword;
     private Button buttonSingUp;
     private SignupRequest signupRequest;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class InscriptionActivity extends AppCompatActivity {
         editTextPassword = binding.editTextPassword;
         editTextConfirmPassword = binding.editTextConfirmPassword;
         buttonSingUp = binding.buttonSignUp;
+        progressBar = binding.progressBar;
 
         // Affichage de l'icône de menu et interaction
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,6 +62,12 @@ public class InscriptionActivity extends AppCompatActivity {
         buttonSingUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Désactiver le bouton pendant l'envoi de la requête
+                buttonSingUp.setEnabled(false);
+
+                // Afficher l'indicateur de progression
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Retrofit: SignupResquest
                 signupRequest = new SignupRequest();
                 signupRequest.username = editTextUsername.getText().toString();
@@ -74,6 +83,12 @@ public class InscriptionActivity extends AppCompatActivity {
                 service.signup(signupRequest).enqueue(new Callback<SigninResponse>() {
                     @Override
                     public void onResponse(Call<SigninResponse> call, Response<SigninResponse> response) {
+                        // Réactiver le bouton
+                        buttonSingUp.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         if (!response.isSuccessful()){
                             // Code erreur http 400 404
                             try {
@@ -106,6 +121,12 @@ public class InscriptionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SigninResponse> call, Throwable t) {
+                        // Réactiver le bouton
+                        buttonSingUp.setEnabled(true);
+
+                        // Masquer l'indicateur de progression
+                        progressBar.setVisibility(View.GONE);
+
                         // Code 500: Erreur de connection serveur
                         Log.i("RETROFIT", t.getMessage() + "service.signup(signupRequest) onFailure");
                         AlertDialog.Builder builder = new AlertDialog.Builder(InscriptionActivity.this);
